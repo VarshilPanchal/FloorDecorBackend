@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.floor.decor.demo.dto.UserDTO;
 import com.floor.decor.demo.entity.User;
 import com.floor.decor.demo.service.UserServices;
 
@@ -25,6 +26,8 @@ public class UserController {
 
 	@Autowired
 	private UserServices userService;
+	
+	
 
 	@GetMapping("/user/list")
 	public List<User> getAllUser() {
@@ -36,15 +39,20 @@ public class UserController {
 		return userService.getUserById(id);
 	}
 
-	@PostMapping(value = "save/user")
+	@PostMapping(value = "/save/user")
 	public User saveUser(@RequestBody User user) {
 		return userService.saveUser(user);
+	}
+	
+	@PostMapping("/authenticate/user")
+	public ResponseEntity<?> authenticateUser(@RequestBody UserDTO userDTO) {
+		return ResponseEntity.ok().body(this.userService.authenticateUser(userDTO.getusername(), userDTO.getPassword()));
 	}
 
 	@PutMapping("/update/user/{id}")
 	public ResponseEntity<User> getUpdateUser(@PathVariable long id, @RequestBody User user) {
 		user.setId(id);
-		return ResponseEntity.ok().body(this.userService.getUpdateUser(user));
+		return ResponseEntity.ok().body(this.userService.updateUser(user));
 	}
 
 	@DeleteMapping("delete/user/{id}")
