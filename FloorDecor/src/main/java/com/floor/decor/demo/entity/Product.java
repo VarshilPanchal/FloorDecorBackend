@@ -14,7 +14,6 @@ import javax.persistence.Table;
 public class Product {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "product_id")
 	private long id;
 	@Column(name = "product_image")
@@ -25,19 +24,22 @@ public class Product {
 	private long prize;
 	@Column(name = "product_activeflag")
 	private boolean activeflag;
+	@Column(name = "product_detail")
+	private String productDetail;
 
 	public Product() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Product(long id, String image, String name, long prize, boolean activeflag) {
+	public Product(long id, String image, String name, long prize, boolean activeflag,String productDetail) {
 		super();
 		this.id = id;
 		this.image = image;
 		this.name = name;
 		this.prize = prize;
 		this.activeflag = activeflag;
+		this.productDetail = productDetail;
 	}
 
 	public long getId() {
@@ -78,6 +80,14 @@ public class Product {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getProductDetail() {
+		return productDetail;
+	}
+
+	public void setProductDetail(String productDetail) {
+		this.productDetail = productDetail;
 	}
 
 }

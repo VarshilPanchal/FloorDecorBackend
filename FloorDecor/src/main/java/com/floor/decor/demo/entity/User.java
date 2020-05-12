@@ -29,6 +29,8 @@ public class User {
 	private int approvedOrders;
 	@Column(name = "rejected_order")
 	private int rejectedOrders;
+	@Column(name = "user_phonenumber")
+	private long phonenumber;
 
 	public User() {
 		super();
@@ -36,7 +38,7 @@ public class User {
 	}
 
 	public User(long id, String name, String email, String password, boolean activeflag, int orders, int approvedOrders,
-			int rejectedOrders) {
+			int rejectedOrders, long phonenumber) {
 		super();
 		this.id = id;
 		this.username = name;
@@ -46,6 +48,7 @@ public class User {
 		this.orders = orders;
 		this.approvedOrders = approvedOrders;
 		this.rejectedOrders = rejectedOrders;
+		this.phonenumber = phonenumber;
 	}
 
 	public long getId() {
@@ -116,7 +119,15 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
 				+ ", activeflag=" + activeflag + ", orders=" + orders + ", approvedOrders=" + approvedOrders
-				+ ", rejectedOrders=" + rejectedOrders + "]";
+				+ ", rejectedOrders=" + rejectedOrders + ",phonenumber=" + phonenumber + "]";
+	}
+
+	public long getPhonenumber() {
+		return phonenumber;
+	}
+
+	public void setPhonenumber(long phonenumber) {
+		this.phonenumber = phonenumber;
 	}
 
 }

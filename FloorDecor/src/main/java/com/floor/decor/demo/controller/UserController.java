@@ -41,12 +41,17 @@ public class UserController {
 
 	@PostMapping(value = "/save/user")
 	public User saveUser(@RequestBody User user) {
-		return userService.saveUser(user);
+		return userService.save(user);
 	}
 	
-	@PostMapping("/authenticate/user")
-	public ResponseEntity<?> authenticateUser(@RequestBody UserDTO userDTO) {
-		return ResponseEntity.ok().body(this.userService.authenticateUser(userDTO.getusername(), userDTO.getPassword()));
+//	@PostMapping("/authenticate/user")
+//	public ResponseEntity<?> authenticateUser(@RequestBody UserDTO userDTO) {
+//		return ResponseEntity.ok().body(this.userService.authenticateUser(userDTO.getusername(), userDTO.getPassword()));
+//	}
+	
+	@GetMapping("{username}")
+	public long getFindId(@PathVariable String username) {
+		return userService.getFindId(username);
 	}
 
 	@PutMapping("/update/user/{id}")

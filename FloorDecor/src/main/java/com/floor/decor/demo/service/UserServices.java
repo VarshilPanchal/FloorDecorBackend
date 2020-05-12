@@ -1,9 +1,14 @@
 package com.floor.decor.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.floor.decor.demo.entity.User;
@@ -11,14 +16,18 @@ import com.floor.decor.demo.exception.ResourceNotFoundException;
 import com.floor.decor.demo.repository.UserRepository;
 
 @Service
-public class UserServices {
+public class UserServices implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository; 
 	
-	public User saveUser(User entity) {
-		return userRepository.save(entity);
-	}
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
+
+	
+//	public User saveUser(User entity) {
+//		return userRepository.save(entity);
+//	}
 	
 	public List<User> getAllUsers(){
 		return (List<User>) userRepository.findAll();
@@ -53,6 +62,10 @@ public class UserServices {
 			return false;
 	}
 	
+	public long getFindId(String username) {
+		return userRepository.findId(username);
+	}
+	
 	public User findByUsername(String name) {
 		return userRepository.findByUsername(name);
 	}
@@ -66,6 +79,23 @@ public class UserServices {
 //			throw new ResourceNotFoundException("User Not Found With This Id: "+user.getId());
 //		}
 		
+	}
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found with username: " + username);
+		}
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+				new ArrayList<>());
+	}
+	
+	public User save(User user) {
+//		DAOUser newUser = new DAOUser();
+		user.getUsername();
+		user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		return userRepository.save(user);
 	}
 	 
 }
