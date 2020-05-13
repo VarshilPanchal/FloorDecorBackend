@@ -1,4 +1,4 @@
-package com.floor.decor.demo.jwt;
+package jwt;
 
 import java.io.IOException;
 import java.io.Serializable;

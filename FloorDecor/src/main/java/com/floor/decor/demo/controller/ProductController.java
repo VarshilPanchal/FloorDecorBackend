@@ -45,12 +45,12 @@ public class ProductController {
 		return productRepository.save(entity);
 	}
 	
-	@GetMapping("productname/{id}")
+	@GetMapping("/product/productname/{id}")
 	public String getFindName(@PathVariable long id) {
 		return productService.getFindNameById(id);
 	}
 	
-	@PutMapping("/update/product/{id}")
+	@PutMapping("/product/update/{id}")
 	public ResponseEntity<Product> getUpdateUser(@PathVariable long id, @RequestBody Product product) {
 		product.setId(id);
 		return ResponseEntity.ok().body(this.productService.updateUser(product));
