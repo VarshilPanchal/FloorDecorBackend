@@ -56,6 +56,32 @@ public class UserServices {
 		}
 
 	}
+	
+	public void changeStatus(long id, int number) {
+		
+		if(number == 0 ) {
+			userRepository.isActive(id);
+		}else {
+			userRepository.isInActive(id);
+			
+		}
+	}
+
+	public List<User> findActiveUser() {
+		return userRepository.findActiveUser();
+	}
+	
+	public boolean findSingleActiveUser(String username) {
+	boolean userStatus = userRepository.findUser(username).getActive();
+		if(userStatus) {
+			return true;
+		}
+		return false;
+	}
+	
+	public List<User> findInactiveUser(){
+		return userRepository.findInactiveUser();
+	}
 
 //	public boolean authenticateUser(String username, String password) {
 //		User user = userRepository.findByUsername(username);
@@ -83,7 +109,6 @@ public class UserServices {
 //		}
 
 	}
-
 
 //	@Override
 //	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

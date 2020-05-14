@@ -33,7 +33,7 @@ public class UserController {
 	private UserRepository userRepository;
 	
 
-//	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/user/list")
 	public List<User> getAllUser() {
 		return (List<User>) userRepository.findAll();
@@ -66,13 +66,28 @@ public class UserController {
 		user.setId(id);
 		return ResponseEntity.ok().body(this.userService.updateUser(user));//new User(user.getUsername(),user.getEmail(),user.getPassword())
 	}
+	
+	@GetMapping("/user/updatestatus/{id}/{number}")
+	public void changeStatus(@PathVariable long id,@PathVariable int number) {
+		
+		userService.changeStatus(id, number);
+		
+	}
 
-//	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/user/delete/{id}")
 	public void deleteUser(@PathVariable long id) {
 		userRepository.deleteById(id);
 	}
 	
+	@GetMapping("user/active")
+	public List<User> getActiveUser(){
+		return userService.findActiveUser();
+	}
 	
+	@GetMapping("user/inactive")
+	public List<User> getInactiveUser(){
+		return userService.findInactiveUser();
+	}
 
 }

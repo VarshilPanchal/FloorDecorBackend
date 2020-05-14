@@ -31,12 +31,16 @@ import com.floor.decor.demo.repository.RoleRepository;
 import com.floor.decor.demo.repository.UserRepository;
 import com.floor.decor.demo.security.JwtUtils;
 import com.floor.decor.demo.security.UserDetailsImpl;
+import com.floor.decor.demo.service.UserServices;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+	
+	@Autowired
+	private UserServices userServices;
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -55,6 +59,9 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+		boolean status = userServices.findSingleActiveUser(loginRequest.getUsername());
+
+		if(status) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -71,6 +78,10 @@ public class AuthController {
 												 userDetails.getUsername(), 
 												 userDetails.getEmail(), 
 												 roles));
+		}
+		return ResponseEntity
+				.badRequest()
+				.body(new MessageResponse("Error: user is deactive !"));
 	}
 
 	@PostMapping("/signup")
