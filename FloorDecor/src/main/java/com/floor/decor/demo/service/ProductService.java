@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.floor.decor.demo.entity.Product;
 import com.floor.decor.demo.exception.ResourceNotFoundException;
+import com.floor.decor.demo.repository.OrderDetailRpository;
 import com.floor.decor.demo.repository.ProductRepository;
 
 @Repository
@@ -35,6 +36,8 @@ public class ProductService {
 	public String getFindNameById(long id) {
 		return productRepository.findName(id);
 	}
+	
+	
 	
 	
 	
