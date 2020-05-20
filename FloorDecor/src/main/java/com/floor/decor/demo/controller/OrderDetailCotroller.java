@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.support.ExampleMatcherAccessor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,65 +36,63 @@ public class OrderDetailCotroller {
 	@Autowired
 	private OrderDetailService orderDetailService;
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("list")
 	public List<Order> getAllOrder() {
 		return orderDetailRpository.findAll();
 	}
 	
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@GetMapping("{id}")
 	public Optional<Order> getSingleOrder(@PathVariable long id) {
 		return orderDetailRpository.findById(id);
 	}
 
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@PostMapping("place")
-	public Order saveOrder(@RequestBody Order order) {
+	public Order placeOrder(@RequestBody Order order) {
 		return orderDetailRpository.save(order);
 	}
 
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@GetMapping("myorder/{id}")
 	public List<OrderDetailDTO> getAllDetailOfUser(@PathVariable long id) {
 		return orderDetailService.getAllDetailOfUser(id);
 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("statuschange/{id}/{number}")
 	public void changeStatus(@PathVariable long id, @PathVariable int number) {
 
 		orderDetailService.changeStatus(id, number);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("approved/list")
 	public List<Order> getApprovedOrder() {
-//		if (orderDetailService.checkApprovedList()) {
-//
-//			return ResponseEntity.badRequest()
-//					.body(new MessageResponse("Error: Not a single order is present in approved order list!"));
-//
-//		} else {
-			return orderDetailRpository.findApprovedOrder();
-//			return ResponseEntity.ok(new MessageResponse("approved order list display successfully!"));
-//		}
+		return orderDetailRpository.findApprovedOrder();	
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("rejected/list")
 	public List<Order> getRejectedOrder(boolean rejectedOrder) {
-//		int approvedOrders = 0;
-//		 Order approvedOrders
-//		if (orderDetailService.checkRejectedList()) {
-//
-//			return ResponseEntity.badRequest()
-//					.body(new MessageResponse("Error: Not a single order is present in rejected order list!"));
-//
-//		} else {
+
 		return	orderDetailRpository.findRejectedOrder();
-//			return ResponseEntity.ok(new MessageResponse("rejected order list display successfully!"));
-//		}
+
 	}
 	
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@PutMapping("update/{id}")
 	public ResponseEntity<Order> getUpdateUser(@PathVariable long id, @RequestBody Order order) {
 		order.setId(id);
 		return ResponseEntity.ok().body(this.orderDetailService.updateOrderDetail(order));//new User(user.getUsername(),user.getEmail(),user.getPassword())
+	}
+	
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@DeleteMapping("delete/{id}")
+	public void deleteOrderById(@PathVariable long id) {
+		orderDetailRpository.deleteById(id);
 	}
 
 }

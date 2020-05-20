@@ -27,11 +27,8 @@ public class UserServices {
 
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
-
-//	public User saveUser(User entity) {
-//		return userRepository.save(entity);
-//	}
-
+	
+	
 	public List<User> getAllUsers() {
 		return (List<User>) userRepository.findAll();
 	}

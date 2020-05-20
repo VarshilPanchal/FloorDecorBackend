@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.floor.decor.demo.dto.UserDTO;
+
 import com.floor.decor.demo.entity.User;
 import com.floor.decor.demo.repository.UserRepository;
 import com.floor.decor.demo.service.UserServices;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/user")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
@@ -34,40 +34,33 @@ public class UserController {
 	
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/user/list")
+	@GetMapping("/list")
 	public List<User> getAllUser() {
 		return (List<User>) userRepository.findAll();
 	}
 
-//	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("/user/single/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@GetMapping("/single/{id}")
 	public Optional<User> getSingleUser(@PathVariable Long id) {
 		return userRepository.findById(id);
 	}
 
-//	@PostMapping(value = "/user/save")
-//	public User saveUser(@RequestBody User user) {
-//		return userService.saveUser(user);
-//	}
-	
-//	@PostMapping("/user/authenticate")
-//	public ResponseEntity<?> authenticateUser(@RequestBody UserDTO userDTO) {
-//		return ResponseEntity.ok().body(this.userService.authenticateUser(userDTO.getusername(), userDTO.getPassword()));
-//	}
-//	
-	@GetMapping("/user/{username}")
+
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@GetMapping("/{username}")
 	public long getFindIdByname(@PathVariable String username) {
 		return userService.getFindId(username);
 	}
 	
-//	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@PutMapping("/user/update/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<User> getUpdateUser(@PathVariable long id, @RequestBody User user) {
 		user.setId(id);
 		return ResponseEntity.ok().body(this.userService.updateUser(user));//new User(user.getUsername(),user.getEmail(),user.getPassword())
 	}
 	
-	@GetMapping("/user/updatestatus/{id}/{number}")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	@GetMapping("/updatestatus/{id}/{number}")
 	public void changeStatus(@PathVariable long id,@PathVariable int number) {
 		
 		userService.changeStatus(id, number);
@@ -75,17 +68,19 @@ public class UserController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/user/delete/{id}")
-	public void deleteUser(@PathVariable long id) {
+	@DeleteMapping("/delete/{id}")
+	public void deleteUserById(@PathVariable long id) {
 		userRepository.deleteById(id);
 	}
 	
-	@GetMapping("user/active")
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/active")
 	public List<User> getActiveUser(){
 		return userService.findActiveUser();
 	}
 	
-	@GetMapping("user/inactive")
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/inactive")
 	public List<User> getInactiveUser(){
 		return userService.findInactiveUser();
 	}
