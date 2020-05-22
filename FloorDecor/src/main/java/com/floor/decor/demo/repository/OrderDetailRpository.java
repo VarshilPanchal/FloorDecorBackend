@@ -43,5 +43,9 @@ public interface OrderDetailRpository extends JpaRepository<Order, Long> {
 	@Query("FROM Order o WHERE o.approvedOrder = 1")
 	public int existsApprovedOrder();
 	
+	@Query("SELECT o FROM Order o WHERE o.userId = :id")
+	public List<Order> getChartDetail(@Param("id") long id );
+	
+	
 //	 Boolean existsApprovedOrder(boolean approvedOrder);
 }

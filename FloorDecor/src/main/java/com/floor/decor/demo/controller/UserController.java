@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.floor.decor.demo.entity.User;
 import com.floor.decor.demo.repository.UserRepository;
 import com.floor.decor.demo.service.UserServices;
@@ -28,10 +27,9 @@ public class UserController {
 
 	@Autowired
 	private UserServices userService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/list")
@@ -45,26 +43,26 @@ public class UserController {
 		return userRepository.findById(id);
 	}
 
-
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@GetMapping("/{username}")
 	public long getFindIdByname(@PathVariable String username) {
 		return userService.getFindId(username);
 	}
-	
+
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@PutMapping("/update/{id}")
 	public ResponseEntity<User> getUpdateUser(@PathVariable long id, @RequestBody User user) {
 		user.setId(id);
-		return ResponseEntity.ok().body(this.userService.updateUser(user));//new User(user.getUsername(),user.getEmail(),user.getPassword())
+		return ResponseEntity.ok().body(this.userService.updateUserDetail(user));// new
+																			// User(user.getUsername(),user.getEmail(),user.getPassword())
 	}
-	
+
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@GetMapping("/updatestatus/{id}/{number}")
-	public void changeStatus(@PathVariable long id,@PathVariable int number) {
-		
+	public void changeStatus(@PathVariable long id, @PathVariable int number) {
+
 		userService.changeStatus(id, number);
-		
+
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -72,17 +70,31 @@ public class UserController {
 	public void deleteUserById(@PathVariable long id) {
 		userRepository.deleteById(id);
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/active")
-	public List<User> getActiveUser(){
+	public List<User> getActiveUser() {
 		return userService.findActiveUser();
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/inactive")
-	public List<User> getInactiveUser(){
+	public List<User> getInactiveUser() {
 		return userService.findInactiveUser();
+	}
+
+	@GetMapping("username")
+	public List<String> getUsername() {
+		return userRepository.findUsername();
+	}
+
+	@PutMapping("editpassword/{id}")
+	public ResponseEntity<User> editPassword(@PathVariable("id") Long id, @RequestBody User user) {
+		
+		user.setId(id);
+		return ResponseEntity.ok().body(this.userService.updateUserPassword(user));
+
+		
 	}
 
 }

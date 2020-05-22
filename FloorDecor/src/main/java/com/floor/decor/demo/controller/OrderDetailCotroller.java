@@ -1,6 +1,7 @@
 package com.floor.decor.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,11 @@ public class OrderDetailCotroller {
 	@DeleteMapping("delete/{id}")
 	public void deleteOrderById(@PathVariable long id) {
 		orderDetailRpository.deleteById(id);
+	}
+	
+	@GetMapping("charts")
+	public Map<String, Integer> getChartDetails(){
+		return orderDetailService.getChartDetails();
 	}
 
 }

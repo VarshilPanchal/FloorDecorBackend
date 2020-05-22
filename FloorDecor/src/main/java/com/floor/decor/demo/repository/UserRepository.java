@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Repository;
 import com.floor.decor.demo.entity.User;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 //	public User findByUsernames(String username);
-//
+
 	@Query("SELECT u FROM User u WHERE u.username = :username")
  	public User findUser(@Param("username") String username);
 
@@ -25,6 +26,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 //	@Query("SELECT u FROM User u WHERE u.username = :username")
 //	public long findId(@Param("username") String username);
+	
+	@Query("SELECT u.username FROM User u ")
+	public List<String> findUsername();
+	
+//	@Query("SELECT u.username FROM User u ")
+//	public List<String> findUsername();
 
 	
 	@Query("SELECT u.id FROM User u WHERE u.username = :username")

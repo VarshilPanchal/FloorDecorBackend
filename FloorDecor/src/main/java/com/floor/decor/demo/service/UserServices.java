@@ -37,7 +37,7 @@ public class UserServices {
 		return userRepository.findById(id);
 	}
 
-	public User updateUser(User user) {
+	public User updateUserDetail(User user) {
 		Optional<User> userDetail = this.userRepository.findById(user.getId());
 
 		if (userDetail.isPresent()) {
@@ -45,6 +45,20 @@ public class UserServices {
 			userUpdate.setId(user.getId());
 			userUpdate.setUsername(user.getUsername());
 			userUpdate.setEmail(user.getEmail());
+//			userUpdate.setPassword(bcryptEncoder.encode(user.getPassword()));
+			userRepository.save(userUpdate);
+			return userUpdate;
+		} else {
+			throw new ResourceNotFoundException("User Not Found With This Id: " + user.getId());
+		}
+
+	}
+	
+	public User updateUserPassword(User user) {
+		Optional<User> userDetail = this.userRepository.findById(user.getId());
+
+		if (userDetail.isPresent()) {
+			User userUpdate = userDetail.get();
 			userUpdate.setPassword(bcryptEncoder.encode(user.getPassword()));
 			userRepository.save(userUpdate);
 			return userUpdate;
@@ -78,6 +92,11 @@ public class UserServices {
 	
 	public List<User> findInactiveUser(){
 		return userRepository.findInactiveUser();
+	}
+	
+	public List<User> findAllUser(){
+		List<User> users =  userRepository.findAll();
+		return users;
 	}
 
 //	public boolean authenticateUser(String username, String password) {
