@@ -85,7 +85,7 @@ public class OrderDetailCotroller {
 	
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@PutMapping("orders/{id}")
-	public ResponseEntity<Order> getUpdateUser(@PathVariable long id, @RequestBody Order order) {
+	public ResponseEntity<Order> getUpdateOrderDetailByUserId(@PathVariable long id, @RequestBody Order order) {
 		order.setId(id);
 		return ResponseEntity.ok().body(this.orderDetailService.updateOrderDetail(order));//new User(user.getUsername(),user.getEmail(),user.getPassword())
 	}

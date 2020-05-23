@@ -18,11 +18,11 @@ public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	public Product updateUser(Product product) {
-		Optional<Product> userDetails = this.productRepository.findById(product.getId());
+	public Product updateProduct(Product product) {
+		Optional<Product> productDetails = this.productRepository.findById(product.getId());
 
-		if (userDetails.isPresent()) {
-			Product productUpdate = userDetails.get();
+		if (productDetails.isPresent()) {
+			Product productUpdate = productDetails.get();
 			productUpdate.setId(product.getId());
 			productUpdate.setName(product.getName());
 			productUpdate.setProductDetail(product.getProductDetail());
