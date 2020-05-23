@@ -21,7 +21,7 @@ import com.floor.decor.demo.repository.UserRepository;
 import com.floor.decor.demo.service.UserServices;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
@@ -32,25 +32,25 @@ public class UserController {
 	private UserRepository userRepository;
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/list")
+	@GetMapping("users")
 	public List<User> getAllUser() {
 		return (List<User>) userRepository.findAll();
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("/single/{id}")
+	@GetMapping("users/{id}")
 	public Optional<User> getSingleUser(@PathVariable Long id) {
 		return userRepository.findById(id);
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("/{username}")
+	@GetMapping("users/user/{username}")
 	public long getFindIdByname(@PathVariable String username) {
 		return userService.getFindId(username);
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@PutMapping("/update/{id}")
+	@PutMapping("users/{id}")
 	public ResponseEntity<User> getUpdateUser(@PathVariable long id, @RequestBody User user) {
 		user.setId(id);
 		return ResponseEntity.ok().body(this.userService.updateUserDetail(user));// new
@@ -58,7 +58,7 @@ public class UserController {
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("/updatestatus/{id}/{number}")
+	@PutMapping("users/{id}/{number}")
 	public void changeStatus(@PathVariable long id, @PathVariable int number) {
 
 		userService.changeStatus(id, number);
@@ -66,29 +66,29 @@ public class UserController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("users/{id}")
 	public void deleteUserById(@PathVariable long id) {
 		userRepository.deleteById(id);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/active")
+	@GetMapping("users/active")
 	public List<User> getActiveUser() {
 		return userService.findActiveUser();
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/inactive")
+	@GetMapping("users/inactive")
 	public List<User> getInactiveUser() {
 		return userService.findInactiveUser();
 	}
 
-	@GetMapping("username")
-	public List<String> getUsername() {
-		return userRepository.findUsername();
-	}
+//	@GetMapping("username")
+//	public List<String> getUsername() {
+//		return userRepository.findUsername();
+//	}
 
-	@PutMapping("editpassword/{id}")
+	@PutMapping("users/editpassword/{id}")
 	public ResponseEntity<User> editPassword(@PathVariable("id") Long id, @RequestBody User user) {
 		
 		user.setId(id);

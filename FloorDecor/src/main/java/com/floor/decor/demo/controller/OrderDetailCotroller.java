@@ -27,7 +27,7 @@ import com.floor.decor.demo.repository.OrderDetailRpository;
 import com.floor.decor.demo.service.OrderDetailService;
 
 @RestController
-@RequestMapping("api/order/")
+@RequestMapping("api/")
 @CrossOrigin(origins = "http://localhost:4200")
 public class OrderDetailCotroller {
 
@@ -38,45 +38,45 @@ public class OrderDetailCotroller {
 	private OrderDetailService orderDetailService;
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("list")
+	@GetMapping("orders")
 	public List<Order> getAllOrder() {
 		return orderDetailRpository.findAll();
 	}
 	
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("{id}")
+	@GetMapping("orders/{id}")
 	public Optional<Order> getSingleOrder(@PathVariable long id) {
 		return orderDetailRpository.findById(id);
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@PostMapping("place")
+	@PostMapping("orders")
 	public Order placeOrder(@RequestBody Order order) {
 		return orderDetailRpository.save(order);
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("myorder/{id}")
+	@GetMapping("orders/myorder/{id}")
 	public List<OrderDetailDTO> getAllDetailOfUser(@PathVariable long id) {
 		return orderDetailService.getAllDetailOfUser(id);
 
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("statuschange/{id}/{number}")
+	@PutMapping("orders/{id}/{number}")
 	public void changeStatus(@PathVariable long id, @PathVariable int number) {
 
 		orderDetailService.changeStatus(id, number);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("approved/list")
+	@GetMapping("orders/approved")
 	public List<Order> getApprovedOrder() {
 		return orderDetailRpository.findApprovedOrder();	
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("rejected/list")
+	@GetMapping("orders/rejected")
 	public List<Order> getRejectedOrder(boolean rejectedOrder) {
 
 		return	orderDetailRpository.findRejectedOrder();
@@ -84,19 +84,19 @@ public class OrderDetailCotroller {
 	}
 	
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@PutMapping("update/{id}")
+	@PutMapping("orders/{id}")
 	public ResponseEntity<Order> getUpdateUser(@PathVariable long id, @RequestBody Order order) {
 		order.setId(id);
 		return ResponseEntity.ok().body(this.orderDetailService.updateOrderDetail(order));//new User(user.getUsername(),user.getEmail(),user.getPassword())
 	}
 	
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("orders/{id}")
 	public void deleteOrderById(@PathVariable long id) {
 		orderDetailRpository.deleteById(id);
 	}
 	
-	@GetMapping("charts")
+	@GetMapping("orders/charts")
 	public Map<String, Integer> getChartDetails(){
 		return orderDetailService.getChartDetails();
 	}

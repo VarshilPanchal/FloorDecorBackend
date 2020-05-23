@@ -22,7 +22,7 @@ import com.floor.decor.demo.repository.ProductRepository;
 import com.floor.decor.demo.service.ProductService;
 
 @RestController
-@RequestMapping("api/product/")
+@RequestMapping("api/")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
 
@@ -33,51 +33,51 @@ public class ProductController {
 	private ProductService productService;
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("list")
-	public List<Product> getAllUser() {
+	@GetMapping("products")
+	public List<Product> getAllProducts() {
 		return (List<Product>) productRepository.findAll();
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("{id}")
-	public Optional<Product> getSingleUser(@PathVariable Long id) {
+	@GetMapping("products/{id}")
+	public Optional<Product> getSingleProduct(@PathVariable Long id) {
 		return productRepository.findById(id);
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@PostMapping("save")
+	@PostMapping("products")
 	public Product saveProduct(@RequestBody Product entity) {
 		return productRepository.save(entity);
 
 	}
 
-	@GetMapping("productname/{id}")
+	@GetMapping("products/productname/{id}")
 	public String getFindName(@PathVariable long id) {
 		return productService.getFindNameById(id);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping("update/{id}")
-	public ResponseEntity<Product> getUpdateUser(@PathVariable long id, @RequestBody Product product) {
+	@PutMapping("products/{id}")
+	public ResponseEntity<Product> getUpdateProduct(@PathVariable long id, @RequestBody Product product) {
 		product.setId(id);
 		return ResponseEntity.ok().body(this.productService.updateUser(product));
 	}
 
 	
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("active")
+	@GetMapping("products/active")
 	public List<Product> getActiveUser() {
 		return productService.findActiveProduct();
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("inactive")
-	public List<Product> getInactiveUser() {
+	@GetMapping("products/inactive")
+	public List<Product> getInactiveProducts() {
 		return productService.findInActiveProduct();
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("changestatus/{id}/{number}")
+	@PutMapping("products/{id}/{number}")
 	public ResponseEntity<?> changeStatus(@PathVariable long id, @PathVariable int number) {
 		if (productRepository.existsById(id)) {
 			productService.changeStatus(id, number);
