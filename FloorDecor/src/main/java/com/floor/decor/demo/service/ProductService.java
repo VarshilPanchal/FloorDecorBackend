@@ -48,12 +48,16 @@ public class ProductService {
 		}
 	}
 
-	public List<Product> findActiveProduct() {
-		return productRepository.findActiveProduct();
-	}
+//	public List<Product> findActiveProduct() {
+//		return productRepository.findActiveProduct();
+//	}
+//	
+//	public List<Product> findInActiveProduct() {
+//		return productRepository.findInactiveProduct();
+//	}
 	
-	public List<Product> findInActiveProduct() {
-		return productRepository.findInactiveProduct();
+	public List<Product> findProductsByStatus(boolean status) {
+		return productRepository.findProductsByStatus(status);
 	}
 
 }

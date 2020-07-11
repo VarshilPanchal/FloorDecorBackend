@@ -31,10 +31,13 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 	public void isInActive(@Param("id") long id );
 	
 	
-	@Query("SELECT p FROM Product p WHERE p.activeflag = 0")
-	public List<Product> findInactiveProduct();
-
-	@Query("SELECT p FROM Product p WHERE p.activeflag = 1")
-	public List<Product> findActiveProduct();
+//	@Query("SELECT p FROM Product p WHERE p.activeflag = 0")
+//	public List<Product> findInactiveProduct();
+//
+//	@Query("SELECT p FROM Product p WHERE p.activeflag = 1")
+//	public List<Product> findActiveProduct();
+	
+	@Query("SELECT p FROM Product p WHERE p.activeflag = :activeflag")
+	public List<Product> findProductsByStatus(@Param ("activeflag") boolean activeflag);
 
 }

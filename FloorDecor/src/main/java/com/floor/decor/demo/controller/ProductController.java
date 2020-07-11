@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.floor.decor.demo.entity.Product;
@@ -32,23 +33,51 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
-	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("products")
-	public List<Product> getAllProducts() {
-		return (List<Product>) productRepository.findAll();
-	}
+//	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//	@GetMapping("products")
+//	public List<Product> getAllProducts() {
+//		return (List<Product>) productRepository.findAll();
+//	}
 
+//	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//	@GetMapping("products/{id}")
+//	public ResponseEntity<?> getSingleProduct(@PathVariable Long id) {
+//		if(productRepository.findById(id).isPresent()) {
+//			
+////			 productRepository.findById(id);
+//			return ResponseEntity.ok(productRepository.findById(id));
+//		}
+//		return  ResponseEntity.badRequest().body(new MessageResponse("ERROR : product is not present"));
+//		
+//	}
+	
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	@GetMapping("products/{id}")
-	public Optional<Product> getSingleProduct(@PathVariable Long id) {
-		return productRepository.findById(id);
+	@GetMapping("products/l")
+	public ResponseEntity<?> getSingleProduct(@RequestParam(value = "id")  Long id) {
+		
+		if(id != null ) {
+		if(productRepository.findById(id).isPresent()) {
+
+			return ResponseEntity.ok(productRepository.findById(id));
+		}
+		return  ResponseEntity.badRequest().body(new MessageResponse("ERROR : product is not present"));
+		}
+		return ResponseEntity.ok(productRepository.findAll());
 	}
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@PostMapping("products")
-	public Product saveProduct(@RequestBody Product entity) {
-		return productRepository.save(entity);
-
+	public ResponseEntity<?> saveProduct(@RequestBody Product entity) {
+		productRepository.save(entity);
+		return ResponseEntity.ok(new Product(
+				entity.getId(),
+				entity.getImage(),
+				entity.getName(),
+				entity.getPrize(),
+				entity.isActiveflag(),
+				entity.getProductDetail()
+				));
+		
 	}
 
 	@GetMapping("products/productname/{id}")
@@ -64,16 +93,24 @@ public class ProductController {
 	}
 
 	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("products/active")
-	public List<Product> getActiveUser() {
-		return productService.findActiveProduct();
-	}
+//	@PreAuthorize("hasRole('ADMIN')")
+//	@GetMapping("products/active")
+//	public List<Product> getActiveUser() {
+//		return productService.findActiveProduct();
+//	}
+//
+//	@PreAuthorize("hasRole('ADMIN')")
+//	@GetMapping("products/inactive")
+//	public List<Product> getInactiveProducts() {
+//		return productService.findInActiveProduct();
+//	}
 
+	
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("products/inactive")
-	public List<Product> getInactiveProducts() {
-		return productService.findInActiveProduct();
+	@GetMapping("products/p")
+	public List<Product> getInactiveProducts(@RequestParam (value = "status") boolean status) {
+//		if(status != null)
+		return productService.findProductsByStatus(status);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
