@@ -1,6 +1,10 @@
 package com.floor.decor.demo.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +27,10 @@ public class AddToCart {
 	@ManyToOne
 	@JoinColumn(name = "cart_id", referencedColumnName = "product_id")
 	private Product products;
-	
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "carts")
+	private List<Order> orders;
+
 	private Long userId;
 
 	public AddToCart() {
@@ -31,7 +38,7 @@ public class AddToCart {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AddToCart(long id, long count, long amount,Long userId, Product product) {
+	public AddToCart(long id, long count, long amount, Long userId, Product product) {
 		super();
 		this.id = id;
 		this.count = count;

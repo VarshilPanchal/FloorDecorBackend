@@ -1,10 +1,18 @@
 package com.floor.decor.demo.entity;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -28,7 +36,7 @@ public class Order {
 
 //	@NotBlank
 	private String name;
-	
+
 //	private String productName;
 
 //	@NotBlank
@@ -47,10 +55,14 @@ public class Order {
 	private long phoneNumber;
 
 	private boolean activeStatus;
-	
+
 	private boolean approvedOrder;
-	
+
 	private boolean rejectedOrder;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "carts_detail", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "cart_detail_id"))
+	private List<AddToCart> carts;
 
 	public Order() {
 		super();
@@ -59,7 +71,8 @@ public class Order {
 
 	public Order(long id, @NotBlank long productId, @NotBlank long userId, @NotBlank String name,
 			@NotBlank String address, @NotBlank String landmark, @NotBlank long pincode, @NotBlank String city,
-			@NotBlank long phoneNumber, @NotBlank boolean activeStatus,boolean approvedOrder,boolean rejectedOrder) {
+			@NotBlank long phoneNumber, @NotBlank boolean activeStatus, boolean approvedOrder, boolean rejectedOrder,
+			List<AddToCart> cartDetail) {
 		super();
 		this.id = id;
 		this.productId = productId;
@@ -74,6 +87,8 @@ public class Order {
 		this.activeStatus = activeStatus;
 		this.approvedOrder = approvedOrder;
 		this.rejectedOrder = rejectedOrder;
+		this.carts = cartDetail;
+
 	}
 
 	public long getId() {
@@ -177,6 +192,14 @@ public class Order {
 
 	public void setRejectedOrder(boolean rejectedOrder) {
 		this.rejectedOrder = rejectedOrder;
+	}
+
+	public List<AddToCart> getCartDetail() {
+		return carts;
+	}
+
+	public void setCartDetail(List<AddToCart> cartDetail) {
+		this.carts = cartDetail;
 	}
 
 //	public String getProductName() {

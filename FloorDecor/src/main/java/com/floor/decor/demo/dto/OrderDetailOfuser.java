@@ -1,14 +1,11 @@
 package com.floor.decor.demo.dto;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.floor.decor.demo.entity.AddToCart;
 
-public class OrderDetailDTO {
+public class OrderDetailOfuser {
 
 	@JsonProperty(value = "id")
 	private Long id;
@@ -16,8 +13,8 @@ public class OrderDetailDTO {
 	@JsonProperty(value = "name")
 	private String name;
 
-	@JsonProperty(value = "productName")
-	private String productName;
+	@JsonProperty(value = "userId")
+	private long userId;
 
 	@JsonProperty(value = "phone_number")
 	private Long phoneNumber;
@@ -53,35 +50,30 @@ public class OrderDetailDTO {
 	private boolean rejectedOrder;
 
 	@JsonProperty(value = "cartDetail")
-	private List<AddToCart> cartDetail ;
+	private List<?> cartDetail;
 
-	public OrderDetailDTO(Long id,
-			String name,
-			String productName,
-			Long phoneNumber, 
-			String address,
-			String landmark,
-			String city,
-			Long pincode,
-			boolean activeStatus,
-			boolean approvedOrder,
-			boolean rejectedOrder
-//			,List<AddToCart> cartDetail
-			) {
-		
+	public OrderDetailOfuser() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public OrderDetailOfuser(Long id, long userId, String name, Long phoneNumber, String address, String landmark,
+			String city, Long pincode, boolean activeStatus, boolean approvedOrder, boolean rejectedOrder
+//			,List<?> cartDetail
+	) {
+		super();
 		this.id = id;
+		this.userId = userId;
 		this.name = name;
-		this.productName = productName;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.landmark = landmark;
 		this.city = city;
 		this.pincode = pincode;
 		this.activeStatus = activeStatus;
-		this.setApprovedOrder(approvedOrder);
-		this.setRejectedOrder(rejectedOrder);
+		this.approvedOrder = approvedOrder;
+		this.rejectedOrder = rejectedOrder;
 //		this.cartDetail = cartDetail;
-
 	}
 
 	public Long getId() {
@@ -116,22 +108,6 @@ public class OrderDetailDTO {
 		this.address = address;
 	}
 
-//	public String getProductId() {
-//		return productId;
-//	}
-//
-//	public void setProductId(String productId) {
-//		this.productId = productId;
-//	}
-//
-//	public String getUserId() {
-//		return userId;
-//	}
-//
-//	public void setUserId(String userId) {
-//		this.userId = userId;
-//	}
-
 	public String getLandmark() {
 		return landmark;
 	}
@@ -156,15 +132,7 @@ public class OrderDetailDTO {
 		this.pincode = pincode;
 	}
 
-//	public String getProductname() {
-//		return productname;
-//	}
-//
-//	public void setProductname(String productname) {
-//		this.productname = productname;
-//	}
-
-	public boolean getActiveStatus() {
+	public boolean isActiveStatus() {
 		return activeStatus;
 	}
 
@@ -188,7 +156,7 @@ public class OrderDetailDTO {
 		this.rejectedOrder = rejectedOrder;
 	}
 
-	public List<AddToCart> getCartDetail() {
+	public List<?> getCartDetail() {
 		return cartDetail;
 	}
 

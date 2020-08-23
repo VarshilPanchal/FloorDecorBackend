@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.floor.decor.demo.dto.OrderDetailDTO;
+import com.floor.decor.demo.dto.OrderDetailOfuser;
 import com.floor.decor.demo.entity.Order;
 import com.floor.decor.demo.entity.User;
 import com.floor.decor.demo.entity.Order;
@@ -20,43 +21,41 @@ public class OrderDetailService {
 
 	@Autowired
 	private OrderDetailRpository orderDetailRepository;
-	
+
 	@Autowired
 	private UserServices userServices;
-	
-	
-	
-	public List<OrderDetailDTO> getAllDetailOfUser(Long id){
-		List<OrderDetailDTO> serviceDetail = orderDetailRepository.orderDetailById(id);
+
+	public List<?> getAllDetailOfUser(Long id) {
+		List<?> serviceDetail = orderDetailRepository.orderDetailById(id);
 		return serviceDetail;
 	}
-	
+
 	public void changeStatus(long id, int number) {
-		if(number==0) {
-			 orderDetailRepository.isActive(id);
-		}else {
+		if (number == 0) {
+			orderDetailRepository.isActive(id);
+		} else {
 			orderDetailRepository.isInActive(id);
 		}
 	}
-	
+
 	public boolean checkRejectedList() {
 		List<Long> rejectedOrder = orderDetailRepository.existsRejectedOrder();
-		if(rejectedOrder.isEmpty()) {
+		if (rejectedOrder.isEmpty()) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	public boolean checkApprovedList() {
 		int approvedOrder = orderDetailRepository.existsApprovedOrder();
-		if(approvedOrder>0) {
+		if (approvedOrder > 0) {
 			return false;
-		}else {
+		} else {
 			return true;
 		}
 	}
-	
+
 	public Order updateOrderDetail(Order order) {
 		Optional<Order> orderDetail = this.orderDetailRepository.findById(order.getId());
 
@@ -76,24 +75,21 @@ public class OrderDetailService {
 		}
 
 	}
-	
-	
-	public Map<String, Integer> getChartDetails(){
+
+	public Map<String, Integer> getChartDetails() {
 		Map<String, Integer> orderDetail = new HashMap<String, Integer>();
-		
+
 		List<User> users = userServices.findAllUser();
-		int totalOrders ;
+		int totalOrders;
 		for (User user : users) {
-			
-			totalOrders = orderDetailRepository.getChartDetail(user.getId()).size() ;
-			orderDetail.put(user.getUsername().toString(), (int)totalOrders);
-			
+
+			totalOrders = orderDetailRepository.getChartDetail(user.getId()).size();
+			orderDetail.put(user.getUsername().toString(), (int) totalOrders);
+
 		}
-		
+
 		return orderDetail;
-		
+
 	}
 
-	
-	
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.floor.decor.demo.dto.OrderDetailDTO;
+import com.floor.decor.demo.dto.OrderDetailOfuser;
 import com.floor.decor.demo.entity.Order;
 import com.floor.decor.demo.entity.User;
 import com.floor.decor.demo.payload.JwtResponse;
@@ -58,10 +59,16 @@ public class OrderDetailCotroller {
 
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	@GetMapping("orders/myorder/{id}")
-	public List<OrderDetailDTO> getAllDetailOfUser(@PathVariable long id) {
+	public List<?> getAllDetailOfUser(@PathVariable long id) {
 		return orderDetailService.getAllDetailOfUser(id);
 
 	}
+
+//	@GetMapping("orders/random/{id}")
+//	public List<OrderDetailDTO> random(@PathVariable long id) {
+//		return orderDetailRpository.orderDetailById(id);
+//
+//	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("orders/{id}/{number}")
